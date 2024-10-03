@@ -89,7 +89,7 @@ pub struct Chat {
     pub name: Option<String>,
     pub r#type: ChatType,
     pub members: Vec<i64>,
-    pub agent_ids: Vec<i64>,
+    pub agents: Vec<i64>,
     #[serde(alias = "createdAt")]
     pub created_at: DateTime<Utc>,
 }
@@ -107,6 +107,31 @@ pub struct Message {
     pub files: Vec<String>,
     #[serde(alias = "createdAt")]
     pub created_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Clone, ToSchema, Serialize, Deserialize, PartialEq, PartialOrd, sqlx::Type)]
+#[sqlx(type_name = "agent_type", rename_all = "snake_case")]
+#[serde(rename_all(serialize = "camelCase"))]
+pub enum AgentType {
+    #[serde(alias = "proxy", alias = "Proxy")]
+    Proxy,
+    #[serde(alias = "reply", alias = "Reply")]
+    Reply,
+    #[serde(alias = "tap", alias = "Tap")]
+    Tap,
+}
+
+#[derive(Debug, Clone, FromRow, ToSchema, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all(serialize = "camelCase"))]
+pub struct ChatAgent {
+    pub id: i64,
+    pub chat_id: i64,
+    pub name: String,
+    pub r#type: AgentType,
+    pub prompt: String,
+    pub args: sqlx::types::Json<serde_json::Value>, // TODO: change to custom type
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 impl User {

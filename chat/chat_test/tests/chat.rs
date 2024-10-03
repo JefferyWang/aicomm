@@ -40,7 +40,7 @@ struct ChatServer {
 
 struct NotifyServer;
 
-const WILD_ADDR: &str = "0.0.0.0:0";
+const WILD_ADDR: &str = "127.0.0.1:0";
 
 #[tokio::test]
 async fn chat_server_should_work() -> Result<()> {
