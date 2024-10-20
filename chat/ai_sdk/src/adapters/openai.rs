@@ -80,7 +80,6 @@ impl AiService for OpenaiAdapter {
             .header("Authorization", format!("Bearer {}", self.api_key))
             .send()
             .await?;
-        println!("{:?}", response);
         let mut data: OpenAIChatCompletionResponse = response.json().await?;
         let content = data
             .choices
