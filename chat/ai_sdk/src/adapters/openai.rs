@@ -1,9 +1,9 @@
-use crate::{AiService, Message};
+use crate::{AiAdapter, AiService, Message};
 use anyhow::anyhow;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
-pub struct OpenAIAdapter {
+pub struct OpenaiAdapter {
     host: String,
     api_key: String,
     model: String,
@@ -27,7 +27,7 @@ pub struct OpenAIChatCompletionResponse {
     pub object: String,
     pub created: u64,
     pub model: String,
-    pub system_fingerprint: String,
+    pub system_fingerprint: Option<String>,
     pub choices: Vec<OpenAIChoice>,
     pub usage: OpenAIUsage,
 }
@@ -53,11 +53,11 @@ pub struct OpenAICompletionTokensDetails {
     pub reasoning_tokens: u32,
 }
 
-impl OpenAIAdapter {
+impl OpenaiAdapter {
     pub fn new(api_key: impl Into<String>, model: impl Into<String>) -> Self {
         let client = Client::new();
         Self {
-            host: "https://api.openai.com/v1".to_string(),
+            host: "https://api.chatanywhere.tech/v1".to_string(),
             api_key: api_key.into(),
             model: model.into(),
             client,
@@ -65,7 +65,7 @@ impl OpenAIAdapter {
     }
 }
 
-impl AiService for OpenAIAdapter {
+impl AiService for OpenaiAdapter {
     async fn complete(&self, messages: &[Message]) -> anyhow::Result<String> {
         let request = OpenAIChatCompletionRequest {
             model: self.model.clone(),
@@ -80,6 +80,7 @@ impl AiService for OpenAIAdapter {
             .header("Authorization", format!("Bearer {}", self.api_key))
             .send()
             .await?;
+        println!("{:?}", response);
         let mut data: OpenAIChatCompletionResponse = response.json().await?;
         let content = data
             .choices
@@ -88,6 +89,12 @@ impl AiService for OpenAIAdapter {
             .message
             .content;
         Ok(content)
+    }
+}
+
+impl From<OpenaiAdapter> for AiAdapter {
+    fn from(adapter: OpenaiAdapter) -> Self {
+        AiAdapter::Openai(adapter)
     }
 }
 
@@ -119,7 +126,7 @@ mod tests {
     #[tokio::test]
     async fn openai_complete_should_work() {
         let api_key = env::var("OPENAI_API_KEY").unwrap();
-        let adapter = OpenAIAdapter::new(api_key, "gpt-4o");
+        let adapter = OpenaiAdapter::new(api_key, "gpt-4o");
         let messages = vec![Message {
             role: Role::User,
             content: "Hello".to_string(),
