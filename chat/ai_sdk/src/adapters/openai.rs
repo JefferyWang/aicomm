@@ -125,7 +125,7 @@ mod tests {
     #[tokio::test]
     async fn openai_complete_should_work() {
         let api_key = env::var("OPENAI_API_KEY").unwrap();
-        let adapter = OpenaiAdapter::new(api_key, "gpt-4o");
+        let adapter = OpenaiAdapter::new(api_key, "gpt-3.5-turbo");
         let messages = vec![Message {
             role: Role::User,
             content: "Hello".to_string(),
