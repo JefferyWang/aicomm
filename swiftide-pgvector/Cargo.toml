@@ -12,7 +12,7 @@ serde_json = "1.0.132"
 sqlx = { version = "0.8.2", features = ["postgres", "uuid"] }
 swiftide-core = "0.13.3"
 tracing = "0.1.40"
-tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+
 
 [dev-dependencies]
 sqlx = { version = "0.8.2", features = [
@@ -27,3 +27,4 @@ swiftide = { version = "0.13.3", features = [
     "openai",
 ] }
 tokio = { version = "1.41.0", features = ["rt", "rt-multi-thread", "macros"] }
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
