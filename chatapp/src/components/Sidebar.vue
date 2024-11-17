@@ -5,7 +5,8 @@
         <span>{{ workspaceName }}</span>
         <button class="text-gray-400 ml-1">&nbsp;▼</button>
       </div>
-      <div v-if="dropdownVisible" class="absolute top-12 left-0 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg z-10">
+      <div v-if="dropdownVisible"
+        class="absolute top-12 left-0 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg z-10">
         <ul class="py-1">
           <li @click="logout" class="px-4 py-2 hover:bg-gray-700 cursor-pointer">Logout</li>
           <!-- Add more dropdown items here as needed -->
@@ -18,7 +19,7 @@
       <h2 class="text-xs uppercase text-gray-400 mb-2">Channels</h2>
       <ul>
         <li v-for="channel in channels" :key="channel.id" @click="selectChannel(channel.id)"
-            :class="['px-2 py-1 rounded cursor-pointer', { 'bg-blue-600': channel.id === activeChannelId }]">
+          :class="['px-2 py-1 rounded cursor-pointer', { 'bg-blue-600': channel.id === activeChannelId }]">
           # {{ channel.name }}
         </li>
       </ul>
@@ -28,9 +29,9 @@
       <h2 class="text-xs uppercase text-gray-400 mb-2">Direct Messages</h2>
       <ul>
         <li v-for="channel in singleChannels" :key="channel.id" @click="selectChannel(channel.id)"
-            :class="['flex items-center px-2 py-1 rounded cursor-pointer', { 'bg-blue-600': channel.id === activeChannelId }]">
+          :class="['flex items-center px-2 py-1 rounded cursor-pointer', { 'bg-blue-600': channel.id === activeChannelId }]">
           <img :src="`https://ui-avatars.com/api/?name=${channel.recipient.fullname.replace(' ', '+')}`"
-               class="w-6 h-6 rounded-full mr-2" alt="Avatar" />
+            class="w-6 h-6 rounded-full mr-2" alt="Avatar" />
           {{ channel.recipient.fullname }}
         </li>
       </ul>
@@ -67,9 +68,9 @@ export default {
     toggleDropdown() {
       this.dropdownVisible = !this.dropdownVisible;
     },
-    logout() {
-      this.$store.dispatch('logout');
-      this.$router.push('/login');
+    async logout() {
+      await this.$store.dispatch('logout');
+      await this.$router.push('/login');
     },
     handleOutsideClick(event) {
       if (!this.$el.contains(event.target)) {
