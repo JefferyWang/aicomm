@@ -6,6 +6,7 @@ members = [
   "chat_test",
   "ai_sdk",
   "bot-server",
+  "analytics-server",
 ]
 resolver = "2"
 
@@ -16,7 +17,7 @@ axum = { version = "0.7.7", features = [
   "query",
   "tracing",
   "multipart",
-  # "macros",
+  "macros",
 ] }
 axum-extra = { version = "0.9.4", features = ["typed-header"] }
 chrono = { version = "0.4.38", features = ["serde"] }
